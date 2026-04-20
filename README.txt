@@ -1,0 +1,2 @@
+这部分代码是配置一个tekton的eventlistener和trigger，获取对应的Tekton EventListener 地址后，填入github仓库的webhook中，如果仓库收到push的事件
+就会发 Webhook POST 请求到 Tekton EventListener 地址，Tekton Triggers 收到请求后会做相应的操作；

@@ -1,0 +1,39 @@
+# 一个简单的 Task：打印收到的参数
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: echo-task
+spec:
+  params:
+    - name: git-url
+    - name: revision
+  steps:
+    - name: echo
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo "======== 触发成功！========"
+        echo "代码仓库：$(params.git-url)"
+        echo "commit ID：$(params.revision)"
+        echo "=========================="
+
+---
+
+# 你的 Pipeline：引用上面的 Task
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: cicd-pipeline  # 👈 就是你需要的这个名字！
+spec:
+  params:
+    - name: git-url
+    - name: revision
+  tasks:
+    - name: echo
+      taskRef:
+        name: echo-task
+      params:
+        - name: git-url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.revision)
