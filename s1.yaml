@@ -15,6 +15,14 @@ spec:
   serviceAccountName: default
   triggers:
     - name: github-push
+      interceptors: 
+        - ref:
+            name: github
+          params:
+            - name: secretRef
+              value:
+                secretName: github-webhook-secret
+                secretKey: secretToken
       bindings: 
         - ref: github-push-binding
       template:
