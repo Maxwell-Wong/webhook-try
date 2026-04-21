@@ -57,7 +57,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: cicd
+        name: cicd-run-
       spec: 
         pipelineRef:
           name: cicd-pipeline
