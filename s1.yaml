@@ -12,18 +12,9 @@ kind: EventListener
 metadata:
   name: github-webhook
 spec:
+  serviceAccountName: default
   triggers:
     - name: github-push
-      interceptors:
-        - ref:
-            name: "github"
-          params:
-            - name: "secretRef"
-              value:
-                secretName: github-webhook-secret
-                secretKey: secretToken
-            - name: "eventTypes"
-              value: ["push"]
       bindings: 
         - ref: github-push-binding
       template:
@@ -40,8 +31,6 @@ spec:
       value: $(body.repository.clone_url)
     - name: git-revision
       value: $(body.head_commit.id)
-    - name: git-branch
-      value: $(body.ref)
 
 ---
 apiVersion: triggers.tekton.dev/v1beta1
@@ -52,13 +41,12 @@ spec:
   params:
     - name: git-repo-url
     - name: git-revision
-    - name: git-branch
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: cicd-run-
-      spec: 
+        generateName: cicd-run-
+      spec:
         pipelineRef:
           name: cicd-pipeline
         params:
